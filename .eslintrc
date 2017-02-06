@@ -1,0 +1,8 @@
+{
+  "extends": ["standard", "standard-react"],
+  "rules":{
+        "no-console": 0,
+        "semi": [2,"always"],
+        "react/prop-types": 0
+    }
+}
