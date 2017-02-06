@@ -1,7 +1,7 @@
 import React from 'react';
 import { sendQuery } from '../graphql.js';
 
-export default class VoteForm extends React.Component {
+export default class Vote extends React.Component {
   constructor () {
     super();
 

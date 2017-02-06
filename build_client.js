@@ -4,18 +4,26 @@ var stylusCssModules = require('rollup-plugin-stylus-css-modules');
 var uglify = require('rollup-plugin-uglify');
 
 rollup.rollup({
-  entry: 'src/main.js',
-  onwarn: () => {},
+  entry: 'src/index.js',
+  external: [
+    'react', 'react-dom', 'react-router'
+  ],
   plugins: [
     stylusCssModules({
       output: 'www/styles.css'
     }),
-    babel(),
-    uglify()
+    babel()
+    // uglify()
   ]
 }).then((bundle) => {
   bundle.write({
     dest: 'www/bundle.js',
-    format: 'umd'
+    format: 'umd',
+    sourceMap: 'inline',
+    globals: {
+      'react': 'React',
+      'react-dom': 'ReactDOM',
+      'react-router': 'ReactRouter'
+    }
   });
 });

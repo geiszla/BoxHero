@@ -43,6 +43,7 @@ function renderPage (appHtml) {
 
         <script src="./external/react.js"></script>
         <script src="./external/react-dom.js"></script>
+        <script src="./external/ReactRouter.js"></script>
 
         <script src="bundle.js"></script>
     </head>

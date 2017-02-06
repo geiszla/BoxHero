@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function loginPage () {
+export default function Login (props) {
   return (
     <div>
-      <button onClick={() => {}}>Login</button>
+      <button onClick={() => props.onClick()}>Login</button>
     </div>
   );
 }

@@ -11,6 +11,9 @@ rollup.rollup({
 }).then((bundle) => {
   bundle.write({
     dest: 'server.bundle.js',
-    format: 'umd'
+    format: 'umd',
+    globals: {
+      'react-router': 'ReactRouter'
+    }
   });
 });
