@@ -89,3 +89,8 @@ $RECYCLE.BIN/
 jsconfig.json
 typings.json
 typings/
+
+# Node.js
+server.bundle.js
+www/
+!www/external

@@ -265,20 +265,14 @@ app.listen(PORT, function () {
   console.log('Webserver running at localhost:' + PORT);
 });
 
-// app.use('/', express.static('www'));
-
-// app.listen(8080, () => {
-//   console.log('Server started on port 8080.');
-// });
-
 // MongoDB
 var collection = void 0;
-MongoClient.connect('mongodb://localhost:27017/movieNight', function (err, db) {
+MongoClient.connect('mongodb://boxhero:BoxHeroY4@ds011374.mlab.com:11374/boxhero', function (err, db) {
   if (err) {
     return console.dir(err);
   }
 
-  console.log('Connected to MongodDB on port 27017.');
+  console.log('Connected to MongodDB.');
 
   collection = db.collection('movies');
 });

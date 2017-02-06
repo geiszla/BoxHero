@@ -60,10 +60,10 @@ app.listen(PORT, function () {
 
 // MongoDB
 let collection;
-MongoClient.connect('mongodb://<dbuser>:<dbpassword>@ds011374.mlab.com:11374/boxhero', function (err, db) {
+MongoClient.connect('mongodb://boxhero:BoxHeroY4@ds011374.mlab.com:11374/boxhero', function (err, db) {
   if (err) { return console.dir(err); }
 
-  console.log('Connected to MongodDB on port 27017.');
+  console.log('Connected to MongodDB.');
 
   collection = db.collection('movies');
 });

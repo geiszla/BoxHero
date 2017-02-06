@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import VoteForm from './components/voteForm.js';
+import VoteForm from './components/vote';
 
 export function VotePage () {
   ReactDOM.render(
