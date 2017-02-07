@@ -1,5 +1,5 @@
-var rollup = require('rollup');
 var babel = require('rollup-plugin-babel');
+var rollup = require('rollup');
 var uglify = require('rollup-plugin-uglify');
 
 rollup.rollup({

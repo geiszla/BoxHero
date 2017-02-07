@@ -16,12 +16,6 @@ export default class App extends React.Component {
     this.context.router.push('/');
   }
 
-  // componentDidMount () {
-  //   if (!this.state.isLoggedIn) {
-  //     this.context.router.push('/login');
-  //   }
-  // }
-
   render () {
     let returnText;
     if (this.state.isLoggedIn) {

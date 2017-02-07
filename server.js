@@ -8,7 +8,7 @@ import express from 'express';
 import graphqlHTTP from 'express-graphql';
 import path from 'path';
 import { renderToString } from 'react-dom/server';
-import routes from './src/routes';
+import routes from './src/components/routes';
 
 // Webserver
 const app = express();
