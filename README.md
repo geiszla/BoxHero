@@ -1,13 +1,10 @@
-# WebApp Template
+# BoxHero
 A Node.js WebApp template using React
 
 **Table of contents**
 * [Setting up](#setting-up)
 * [Development](#development)
 * [Project Structure](#project-structure)
-
-This document contains setup instructions for a previous version of this project. There could be some differences which can cause errors during install. Instructions will be updated soon...
-
 
 ## Setting up
 ### Install server
@@ -49,6 +46,13 @@ Visual Studio Code is a text editor that provides useful tools for easy JavaScri
 ]
 ```
 
+#### Install React Developer Tools Chrome Extension (optional)
+Adds React debugging tools to the Chrome Developer Tools.
+
+1. Install React Developer Tools Chrome Extension from the [Chrome Extensions website] (https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en).
+2. To use it open Chrome Developer Tools (while the tab with the developed website is selected) by pressing the "F12" key or by right click on the page followed by "Inspect" option.
+3. In Chrome Developer Tools select "React" tab.
+
 ## Development
 ### Without Visual Studio Code
 #### Start server
@@ -81,43 +85,45 @@ See set up instructions above.
 5. Repeat linting with all modified files.
 
 ## Project Structure
-This is a previous version of the project structure. Will be updated soon...
-
 * node_modules
 
    Node.js modules used by our project. They are listed in package.json under "dependencies" and "devDependencies" sections and are automatically fetched by the "yarn install" command (they shouldn't be modified manually).
 
 * src
 
-   Source files of the user interface mainly consisting of react code.
+   Source files of the user interface mainly consisting of React and JavaScript code.
 
   * components
 
-     The react elements are defined here. hi.js contains the definition of a simple react component.
+     Each page is defined here (they are written in React). The "routes.js" file contains the routing information of the pages (the structure of the website).
 
-  * main.js
+  * styles
 
-     JavaScript code that's run first and loads and runs the react elements.
+     Contains the styles of the website (written in stylus). It's compiled to CSS code during client compilation (see build_client.js).
 
-  * test.js
+  * index.js
 
-     A sample react file that defines a page.
+     Renders the React document starting with the entry "Router" object (which handles the navigation between pages).
+
+  * graphql.js
+
+     Handles the request and response to/from the GraphQL backend (e.g. to fetch data from the database).
 
 * www
 
-   Files that will be sent to the client the first time it visits the webapp. They are generated from the source files in the "src" folder by the make.js script.
-
-   * index.html
-
-      The frame of the webapp consisting of only a basic html frame and the include of the react framework files and bundle.js.
-
-  * bundle.js
-
-     JavaScript code that generates each page of the webapp dinamically when the user navigates on it.
+   Files that will be sent to the client the first time it visits the webapp. They are generated from the source files in the "src" folder by the build_client.js script.
 
   * external
 
-    Don't worry about it, we probably won't need it...
+    Contains the libraries used by the application at runtime (e.g. React, MobX, etc.).
+
+  * bundle.js
+
+     JavaScript code that generates each page and element of the webapp dinamically when the user navigates on it.
+
+  * styles.CSS
+
+    Styles for the application compiled from the stylus files in "src/styles".
 
 * .babelrc
 
@@ -127,17 +133,29 @@ This is a previous version of the project structure. Will be updated soon...
 
   Configuration file for the linter. It specifies the coding standard and the rules of it.
 
-* index.js
+* build_client.js
 
-   JavaScript code that describes the working of the webserver and sends the generated index.html and bundle.js files to the client on request. Runs first when the server is started (by "npm start" command).
+   Code that generates "www/bundle.js" - by translating and packing the react elements together - and "www/styles.css". If "npm run edit" command is used it runs every time the code changes updating the bundle.js file.
 
-* make.js
+* build_server.js
 
-   Code that generates the bundle.js by translating and packing the react elements together. If "npm run edit" command is used it runs every time the code changes updating the bundle.js file.
+  Code that generates server.bundle.js from server.js (to convert ES6 code in server.js so that it can be run by Node.js).
+
+* jsconfig.json
+
+   Contains JavaScript language serveice configuration options (used by e.g. Visual Studio Code).
 
 * package.json
 
    Contains the properties and dependencies of the project.
+
+* server.bundle.js
+
+   The generated server file. Runs first when the server is started (by "npm start" command).
+
+* server.js
+
+   JavaScript code that describes the working of the webserver and sends the generated index.html and bundle.js files to the client on request. Compiled to server.bundle.js.
 
 * yarn.lock
 
