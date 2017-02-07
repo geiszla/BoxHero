@@ -26,8 +26,8 @@ export default class App extends React.Component {
 
     return (returnText);
   }
-}
 
-App.contextTypes = {
-  router: React.PropTypes.object
-};
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+}

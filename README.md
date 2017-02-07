@@ -6,7 +6,7 @@ A Node.js WebApp template using React
 * [Development](#development)
 * [Project Structure](#project-structure)
 
-This document contains setup instructions for a previous version of this project. There could be some differences which can cause errors during install. Insctructions will be updated soon...
+This document contains setup instructions for a previous version of this project. There could be some differences which can cause errors during install. Instructions will be updated soon...
 
 
 ## Setting up

@@ -1,6 +1,5 @@
 import { Router, browserHistory } from 'react-router';
 
-import App from './components/App';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import routes from './components/routes';

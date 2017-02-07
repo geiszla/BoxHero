@@ -6,7 +6,7 @@ var uglify = require('rollup-plugin-uglify');
 rollup.rollup({
   entry: 'src/index.js',
   external: [
-    'react', 'react-dom', 'react-router'
+    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router'
   ],
   plugins: [
     stylusCssModules({
@@ -21,6 +21,8 @@ rollup.rollup({
     format: 'umd',
     sourceMap: 'inline',
     globals: {
+      'mobx': 'mobx',
+      'mobx-react': 'mobxReact',
       'react': 'React',
       'react-dom': 'ReactDOM',
       'react-router': 'ReactRouter'
