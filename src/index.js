@@ -5,7 +5,9 @@ import ReactDOM from 'react-dom';
 import routes from './components/routes';
 import styles from './styles/styles.styl';
 
-ReactDOM.render(
-  <Router routes={routes} history={browserHistory} />,
+window.addEventListener('load', () => {
+  ReactDOM.render(
+    <Router routes={routes} history={browserHistory} />,
     document.getElementById('root')
-);
+  );
+});
