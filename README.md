@@ -1,23 +1,23 @@
 # BoxHero
-A Node.js WebApp template using React
+A Node.js WebApp using React
 
 **Table of contents**
 * [Setting up](#setting-up)
-* [Development](#development)
+* [Usage](#usage)
 * [Project Structure](#project-structure)
 
 ## Setting up
 ### Install server
 1. Download or clone project source.
 2. Unzip files to any directory.
-3. Install latest version of Node.js with default settings (https://nodejs.org/en/download/).
-4. Install latest Yarn Package Manager release with default settings (https://github.com/yarnpkg/yarn/releases).
+3. Install latest version of Node.js with default settings (https://nodejs.org/en/download/). On Linux you may need to add the node/bin folder to the path manually.
+4. Install latest Yarn Package Manager release with default settings (https://yarnpkg.com/lang/en/docs/install/).
 5. Navigate to unzipped project files using a command line utility.
-6. Enter "yarn install" to install all dependencies of the project (use "yarn install --production" for production use if development dependencies are not needed).
+6. Enter "yarn install" to install all dependencies of the project.
 7. Enter "npm install -g nodemon" to install node monitoring utility (automatically restarts Node.js server when a file is modified).
 
 ### Set up development environment
-1. Enter "npm install -g standard-react" to install linter module (you don't need this if you are using Visual Studio Code's builtin ESLint linter (see install instructions below)).
+1. Enter "npm install -g standard-react" to install linter module (you don't need this if you are using Visual Studio Code's builtin ESLint linter (see setup instructions below)).
 2. Optionally install some of the development tools below.
 
 #### Install LivePage chrome extension (optional)
@@ -38,7 +38,7 @@ Visual Studio Code is a text editor that provides useful tools for easy JavaScri
 2. Open project folder inside Visual Studio Code by clicking File->"Open Folder..." or by right clicking on the folder in Windows Explorer and clicking "Open with Code".
 3. If terminal is not open in the bottom of the text editor pane open it by selecting View->"Integrated Terminal" menu option.
 4. Install "ESLint" by selecting View->Extensions and typing it into the search field.
-5. Optionally set up key binding for linting the project. Select File->Preferences->"Keyboard Shortcuts" and copy the following into the right window pane (user settings) replacing the shortcut with the chosen one.
+5. Optionally set up a key shortcut for linting. Select File->Preferences->"Keyboard Shortcuts" and copy the following into the right window pane (user settings) replacing the shortcut with the chosen one.
 
 ```json
 [
@@ -50,39 +50,41 @@ Visual Studio Code is a text editor that provides useful tools for easy JavaScri
 Adds React debugging tools to the Chrome Developer Tools.
 
 1. Install React Developer Tools Chrome Extension from the [Chrome Extensions website] (https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en).
-2. To use it open Chrome Developer Tools (while the tab with the developed website is selected) by pressing the "F12" key or by right click on the page followed by "Inspect" option.
+2. To use it open Chrome Developer Tools (while the tab with the developed website is selected) by pressing the "F12" key or by right clicking the page followed by "Inspect" option.
 3. In Chrome Developer Tools select "React" tab.
 
-## Development
+## Usage
 ### Without Visual Studio Code
 #### Start server
 1. Navigate to the project files using a command line utility.
-2. Enter "npm start" to start the server.
-3. Open a web browser and navigate to "[http://localhost:8080/](http://localhost:8080/)" to access the webapp.
-4. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
+2. Enter "yarn start" to start the server.
+4. If you install the server for production use (i.e. you don't want to edit it) open a new terminal, navigate to the project files and enter "node build_client.js" and jump to [Visit website](#visit-the-website) section.
 
 #### Start editing
 1. Navigate to the project files using a command line utility.
-2. Enter "npm run edit" to start monitoring the changes in code and automatically regenerate the application for the server.
+2. Enter "yarn run edit" to start monitoring the changes in code and automatically regenerate the application for the server.
 3. Before every git push enter "standard-react --fix" to fix syntactic and semantic errors in JavaScript files (may have to run the command multiple times to fix all issues).
 4. Fix other issues, which couldn't be automatically solved, reported by the prevoius command.
 
 ### With Visual Studio Code
-See set up instructions above.
+See setup instructions above.
 
 #### Start server
 1. Open project folder inside Visual Studio Code by clicking File->"Open Folder..." or by right clicking on the folder in Windows Explorer and clicking "Open with Code".
 2. If terminal is not open in the bottom of the text editor pane open it by selecting View->"Integrated Terminal" menu option.
-3. In the terminal enter "npm start" to start the server.
-4. Open a web browser and navigate to "[http://localhost:8080/](http://localhost:8080/)" to access the webapp.
-5. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
+3. In the terminal enter "yarn start" to start the server.
+4. If you install the server for production use (i.e. you don't want to edit it) open a new terminal, navigate to the project files and enter "node build_client.js" and jump to [Visit website](#visit-the-website) section.
 
 #### Start editing
 1. In Visual Studio Code click on the "+" icon in the terminal pane to open a new terminal.
-2. Enter "npm run edit" to start monitoring the changes in code and automatically regenerate the application for the server.
+2. Enter "yarn run edit" to start monitoring the changes in code and automatically regenerate the application for the server.
 3. Before every git push use the previously set up key shortcut to lint the current file and fix syntactic and semantic errors in JavaScript files (may have to run the command multiple times to fix all issues).
 4. Fix other issues, which couldn't be automatically solved, reported by the prevoius command.
 5. Repeat linting with all modified files.
+
+### Visit the website
+4. Open a web browser and navigate to "[http://localhost:8080/](http://localhost:8080/)" to access the webapp.
+5. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
 
 ## Project Structure
 * node_modules
@@ -135,7 +137,7 @@ See set up instructions above.
 
 * build_client.js
 
-   Code that generates "www/bundle.js" - by translating and packing the react elements together - and "www/styles.css". If "npm run edit" command is used it runs every time the code changes updating the bundle.js file.
+   Code that generates "www/bundle.js" - by translating and packing the react elements together - and "www/styles.css". If "yarn run edit" command is used it runs every time the code changes updating the bundle.js file.
 
 * build_server.js
 
@@ -151,7 +153,7 @@ See set up instructions above.
 
 * server.bundle.js
 
-   The generated server file. Runs first when the server is started (by "npm start" command).
+   The generated server file. Runs first when the server is started (by "yarn start" command).
 
 * server.js
 
