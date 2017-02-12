@@ -44,7 +44,7 @@ export default class Vote extends React.Component {
     return (
       <div>
         <input type='text' id='searchField' onKeyUp={() => this.handleKeyUp()} />
-        <button>Search</button>
+        <button>Add</button>
         <div style={{display: isNewMovieVisible}}>
           <Movie value={newMovie.title} />
         </div>
