@@ -58,13 +58,14 @@ Adds React debugging tools to the Chrome Developer Tools.
 #### Start server
 1. Navigate to the project files using a command line utility.
 2. Enter "yarn start" to start the server.
-4. If you install the server for production use (i.e. you don't want to edit it) open a new terminal, navigate to the project files and enter "node build_client.js" and jump to "[Visit website](#visit-the-website)" section.
+3. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
 
 #### Start editing
 1. Navigate to the project files using a command line utility.
 2. Enter "yarn run edit" to start monitoring the changes in code and automatically regenerate the application for the server.
 3. Before every git push enter "standard-react --fix" to fix syntactic and semantic errors in JavaScript files (may have to run the command multiple times to fix all issues).
 4. Fix other issues, which couldn't be automatically solved, reported by the previous command.
+5. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
 
 ### With Visual Studio Code
 See setup instructions above.
@@ -73,7 +74,7 @@ See setup instructions above.
 1. Open project folder inside Visual Studio Code by clicking File > "Open Folder..." or by right clicking on the folder in Windows Explorer and clicking "Open with Code".
 2. If terminal is not open in the bottom of the text editor pane open it by selecting View > "Integrated Terminal" menu option.
 3. In the terminal enter "yarn start" to start the server.
-4. If you install the server for production use (i.e. you don't want to edit it) open a new terminal, navigate to the project files and enter "node build_client.js" and jump to "[Visit website](#visit-the-website)" section.
+4. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
 
 #### Start editing
 1. In Visual Studio Code click on the "+" icon in the terminal pane to open a new terminal.
@@ -81,19 +82,35 @@ See setup instructions above.
 3. Before every git push use the previously set up key shortcut to lint the current file and fix syntactic and semantic errors in JavaScript files (may have to run the command multiple times to fix all issues).
 4. Fix other issues, which couldn't be automatically solved, reported by the previous command.
 5. Repeat linting with all modified files.
+6. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
 
 ### Visit the website
-4. Open a web browser and navigate to "[http://localhost:8080/](http://localhost:8080/)" to access the webapp.
-5. Optionally turn on LivePage extension by clicking on its icon in the chrome extenstion bar (see install instructions above).
+Open a web browser and navigate to "[http://localhost:8080/](http://localhost:8080/)" to access the webapp.
 
 ## Project Structure
 * node_modules
 
    Node.js modules used by our project. They are listed in package.json under "dependencies" and "devDependencies" sections and are automatically fetched by the "yarn install" command (they shouldn't be modified manually).
 
+* server
+
+   Code of the backend. They are packed together into server.bundle.js.
+
+  * graphql.js
+
+     All the GraphQL types and schemas are defined here. They hold information on how to respond to requests from the GraphQL frontend.
+
+  * mongoose.js
+
+     Mongoose schemas and models are defined here. They specify how data in the MongoDB database looks like and how to get/insert/update data when a GraphQL query is serviced.
+
+  * server.jsx
+
+     JavaScript code that describes the working of the webserver and sends the generated index.html and bundle.js files to the client on request.
+
 * src
 
-   Source files of the user interface mainly consisting of React and JavaScript code.
+   Source files of the front end mainly consisting of React and JavaScript code.
 
   * components
 
@@ -103,13 +120,13 @@ See setup instructions above.
 
      Contains the styles of the website (written in stylus). It's compiled to CSS code during client compilation (see build_client.js).
 
-  * index.js
-
-     Renders the React document starting with the entry "Router" object (which handles the navigation between pages).
-
   * graphql.js
 
      Handles the request and response to/from the GraphQL backend (e.g. to fetch data from the database).
+
+  * index.jsx
+
+     Renders the React document starting with the entry "Router" object (which handles the navigation between pages).
 
 * www
 
@@ -117,19 +134,19 @@ See setup instructions above.
 
   * external
 
-    Contains the libraries used by the application at runtime (e.g. React, MobX, etc.).
+    Contains libraries used by the application at runtime (e.g. React, MobX, etc.).
 
   * bundle.js
 
      JavaScript code that generates each page and element of the webapp dynamically when the user navigates on it.
 
-  * styles.CSS
+  * styles.css
 
     Styles for the application compiled from the stylus files in "src/styles".
 
 * .babelrc
 
-   Configuration file for the babel node module which generates bundle.js from the react code.
+   Configuration file for the babel node module which translates JSX code to JavaScript.
 
 * .eslintrc
 
@@ -141,7 +158,7 @@ See setup instructions above.
 
 * build_server.js
 
-  Code that generates server.bundle.js from server.js (to convert ES6 code in server.js so that it can be run by Node.js).
+  Code that generates server.bundle.js from server.js (to convert ES6 and JSX code in server.js to plain JavaScript so that it can be run by Node.js).
 
 * jsconfig.json
 
@@ -154,10 +171,6 @@ See setup instructions above.
 * server.bundle.js
 
    The generated server file. Runs first when the server is started (by "yarn start" command).
-
-* server.js
-
-   JavaScript code that describes the working of the webserver and sends the generated index.html and bundle.js files to the client on request. Compiled to server.bundle.js.
 
 * yarn.lock
 
