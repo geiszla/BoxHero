@@ -1,7 +1,7 @@
 import React from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { sendQuery } from '../graphql.js';
+import sendQuery from '../graphql';
 
 @observer
 export default class Vote extends React.Component {
@@ -22,7 +22,7 @@ export default class Vote extends React.Component {
   handleKeyUp () {
     const searchInput = document.getElementById('searchField').value;
     if (searchInput !== '') {
-      this.newMovie = {title: searchInput};
+      this.newMovie = { title: searchInput };
     } else {
       this.newMovie = {};
     }
@@ -31,21 +31,19 @@ export default class Vote extends React.Component {
   render () {
     const movies = this.movies;
 
-    const movieList = movies.map((currMovie, movieNumber) => {
-      return (
-        <Movie key={currMovie._id} value={currMovie.title} />
-      );
-    });
+    const movieList = movies.map(currMovie => (
+      <Movie key={currMovie._id} value={currMovie.title} />
+      ));
 
     const newMovie = this.newMovie;
-    let isNewMovieVisible = (Object.keys(newMovie).length !== 0 ||
+    const isNewMovieVisible = (Object.keys(newMovie).length !== 0 ||
       newMovie.constructor !== Object) ? 'block' : 'none';
 
     return (
       <div>
         <input type='text' id='searchField' onKeyUp={() => this.handleKeyUp()} />
         <button>Add</button>
-        <div style={{display: isNewMovieVisible}}>
+        <div style={{ display: isNewMovieVisible }}>
           <Movie value={newMovie.title} />
         </div>
         <div>{movieList}</div>
@@ -63,7 +61,7 @@ class Movie extends React.Component {
 
     return (
       <div>
-        <img src={imageSource} />
+        <img alt='Movie poster placeholder' src={imageSource} />
         <div>{this.props.value}</div>
       </div>
     );

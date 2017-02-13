@@ -1,9 +1,9 @@
 import { IndexRoute, Route } from 'react-router';
 
-import App from './App';
-import Login from './Login';
+import App from './App.jsx';
+import Login from './Login.jsx';
 import React from 'react';
-import Vote from './Vote';
+import Vote from './Vote.jsx';
 
 export default (
   <Route path='/' component={App}>

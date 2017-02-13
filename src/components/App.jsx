@@ -1,8 +1,12 @@
-import Login from './Login';
+import Login from './Login.jsx';
 import React from 'react';
-import Vote from './Vote';
+import Vote from './Vote.jsx';
 
 export default class App extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+
   constructor () {
     super();
 
@@ -25,9 +29,5 @@ export default class App extends React.Component {
     }
 
     return (returnText);
-  }
-
-  static contextTypes = {
-    router: React.PropTypes.object
   }
 }

@@ -1,8 +1,8 @@
-var babel = require('rollup-plugin-babel');
-var rollup = require('rollup');
+const babel = require('rollup-plugin-babel');
+const rollup = require('rollup');
 
 rollup.rollup({
-  entry: 'server/server.js',
+  entry: 'server/server.jsx',
   onwarn: () => {},
   plugins: [ babel() ]
 }).then((bundle) => {

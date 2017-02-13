@@ -1,10 +1,10 @@
-var babel = require('rollup-plugin-babel');
-var rollup = require('rollup');
-var stylusCssModules = require('rollup-plugin-stylus-css-modules');
-var uglify = require('rollup-plugin-uglify');
+const babel = require('rollup-plugin-babel');
+const rollup = require('rollup');
+const stylusCssModules = require('rollup-plugin-stylus-css-modules');
+const uglify = require('rollup-plugin-uglify');
 
 rollup.rollup({
-  entry: 'src/index.js',
+  entry: 'src/index.jsx',
   external: [
     'mobx', 'mobx-react', 'react', 'react-dom', 'react-router'
   ],
@@ -21,9 +21,9 @@ rollup.rollup({
     format: 'umd',
     sourceMap: 'inline',
     globals: {
-      'mobx': 'mobx',
+      mobx: 'mobx',
       'mobx-react': 'mobxReact',
-      'react': 'React',
+      react: 'React',
       'react-dom': 'ReactDOM',
       'react-router': 'ReactRouter'
     }
