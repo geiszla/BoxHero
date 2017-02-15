@@ -110,7 +110,7 @@ Open a web browser and navigate to "[http://localhost:8080/](http://localhost:80
 
 * src
 
-   Source files of the front end mainly consisting of React and JavaScript code.
+   Source files of the frontend mainly consisting of React and JavaScript code.
 
   * components
 

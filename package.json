@@ -3,18 +3,25 @@
   "version": "0.0.1",
   "main": "server.bundle.js",
   "scripts": {
-    "start": "nodemon --ignore src --ignore www --ignore build_client.js --ignore server.bundle.js --exec yarn run start:server",
-    "start:server": "node build_server.js && node server.bundle.js",
-    "edit": "nodemon -e js,html,styl --watch src --watch build_client.js --exec node build_client.js"
+    "start": "nodemon -e js,jsx --watch server --watch scripts/build_client.js --exec yarn run start:server",
+    "start:server": "node scripts/build_server.js && node server.bundle.js",
+    "production": "node server.bundle.js",
+    "edit": "nodemon -e js,jsx,html,styl --watch src --watch scripts/build_client.js --watch scripts/build_options.js --exec node scripts/build_client.js"
   },
   "license": "MIT",
   "dependencies": {
     "compression": "^1.6.2",
-    "express": "^4.14.0",
+    "express": "^4.14.1",
     "express-graphql": "^0.6.3",
     "express-jwt": "^5.1.0",
     "graphql": "^0.9.1",
-    "mongoose": "^4.8.2"
+    "mobx": "^3.1.0",
+    "mobx-react": "^4.1.0",
+    "mongoose": "^4.8.2",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.30.7",
+    "react-dom": "^15.4.2",
+    "react-router": "^3.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
@@ -33,14 +40,11 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-react": "^6.7.1",
     "eslint-plugin-standard": "^2.0.1",
-    "mobx": "^3.1.0",
-    "mobx-react": "^4.1.0",
-    "react": "^15.4.1",
-    "react-bootstrap": "^0.30.7",
-    "react-dom": "^15.4.2",
-    "react-router": "^3.0.2",
     "rollup": "^0.36.4",
     "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-stylus-css-modules": "^1.2.3",
     "rollup-plugin-uglify": "^1.0.1"
   }

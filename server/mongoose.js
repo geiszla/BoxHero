@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 // Users
 const userSchema = new Schema({
@@ -26,7 +26,7 @@ userSchema.query.boxesFound = (firstName, callback) => {
   User.findOne({ 'name.first': firstName }).populate('boxesFound._id').exec(callback);
 };
 
-export const User = mongoose.model('User', userSchema);
+export const User = model('User', userSchema);
 
 // Boxes
 const boxSchema = new Schema({
@@ -38,11 +38,11 @@ const boxSchema = new Schema({
   content: String
 });
 
-export const Box = mongoose.model('Box', boxSchema);
+export const Box = model('Box', boxSchema);
 
 // Movies
 const movieSchema = new Schema({
   title: String
 });
 
-export const Movie = mongoose.model('Movie', movieSchema);
+export const Movie = model('Movie', movieSchema);

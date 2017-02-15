@@ -31,6 +31,15 @@ app.get('*', (req, res) => {
   });
 });
 
+const externalDependencies = `
+          <script src="https://unpkg.com/react@^15.4.2/dist/react.js"></script>
+          <script src="https://unpkg.com/react-dom@^15.4.2/dist/react-dom.js"></script>
+          <script src="https://unpkg.com/react-router@3.0.2/umd/ReactRouter.js"></script>
+          <script src="https://unpkg.com/react-bootstrap@0.30.7/dist/react-bootstrap.js"></script>
+          <script src="https://unpkg.com/mobx@^3.1.0/lib/mobx.umd.js"></script>
+          <script src="https://unpkg.com/mobx-react@^4.1.0/index.js"></script>
+`;
+
 function renderPage (appHtml) {
   return `
     <!DOCTYPE html>
@@ -38,15 +47,8 @@ function renderPage (appHtml) {
     <head>
         <meta charset="UTF-8">
         <title>Movie Night Vote</title>
-
         <link rel="stylesheet" href="styles.css">
-
-        <script src="./external/react.js"></script>
-        <script src="./external/react-dom.js"></script>
-        <script src="./external/ReactRouter.js"></script>
-        <script src="./external/mobx.umd.js"></script>        
-        <script src="./external/index.js"></script>
-
+        ${isProduction ? '' : externalDependencies}
         <script src="bundle.js"></script>
     </head>
     <body>
