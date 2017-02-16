@@ -33,6 +33,7 @@ module.exports.productionOptions = {
   entry: 'src/index.jsx',
   plugins: [
     stylusCssModules({
+      sourceMap: false,
       output: 'www/styles.css'
     }),
     babel({

@@ -14,7 +14,7 @@ A Node.js WebApp using React
 4. Install latest Yarn Package Manager release with default settings (https://yarnpkg.com/lang/en/docs/install/).
 5. Navigate to unzipped project files using a command line utility.
 6. Enter "yarn install" to install all dependencies of the project.
-7. Enter "npm install -g nodemon" to install node monitoring utility (automatically restarts Node.js server when a file is modified).
+7. Enter "**npm** install -g nodemon" to install node monitoring utility (automatically restarts Node.js server when a file is modified).
 
 ### Set up development environment
 1. Enter "npm install -g standard-react" to install linter module (you don't need this if you are using Visual Studio Code's built-in ESLint linter (see setup instructions below)).
@@ -23,7 +23,7 @@ A Node.js WebApp using React
 #### Install LivePage Chrome extension (optional)
 LivePage automatically reloads the page when the application is updated.
 
-1. Download source code of latest release of LivePage (https://github.com/MikeRogers0/LivePage/releases)
+1. Download source code of latest release of LivePage (https://github.com/MikeRogers0/LivePage/releases).
 2. Unzip files to any folder.
 3. Open Chrome extensions page (chrome://extensions/).
 4. Tick the box next to "Developer mode" option on the top right corner of the page.
@@ -58,7 +58,7 @@ Adds React debugging tools to the Chrome Developer Tools.
 #### Start server
 1. Navigate to the project files using a command line utility.
 2. Enter "yarn start" to start the server.
-3. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
+3. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node scripts/build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
 
 #### Start editing
 1. Navigate to the project files using a command line utility.
@@ -74,7 +74,7 @@ See setup instructions above.
 1. Open project folder inside Visual Studio Code by clicking File > "Open Folder..." or by right clicking on the folder in Windows Explorer and clicking "Open with Code".
 2. If terminal is not open in the bottom of the text editor pane open it by selecting View > "Integrated Terminal" menu option.
 3. In the terminal enter "yarn start" to start the server.
-4. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
+4. If you install the server for production use (i.e. you don't want to edit the webapp) open a new terminal, navigate to the project files and enter "node scripts/build_client.js". Then jump to "[Visit website](#visit-the-website)" section.
 
 #### Start editing
 1. In Visual Studio Code click on the "+" icon in the terminal pane to open a new terminal.
@@ -91,6 +91,22 @@ Open a web browser and navigate to "[http://localhost:8080/](http://localhost:80
 * node_modules
 
    Node.js modules used by our project. They are listed in package.json under "dependencies" and "devDependencies" sections and are automatically fetched by the "yarn install" command (they shouldn't be modified manually).
+
+* scripts
+
+   Build scripts and options for making bundle.js (client)  and server.bundle.js (server).
+
+  * build_client.js
+
+     Code that generates "www/bundle.js" - by translating and packing the react elements together - and "www/styles.css". If "yarn run edit" command is used it runs every time the code changes updating the bundle.js file.
+
+  * build_options.js
+
+     Options for bundling for development and production. Build mode can be changed by changing isProduction variable in this file.
+
+  * build_server.js
+
+     Code that generates server.bundle.js from server.js (to convert ES6 and JSX code in server.js to plain JavaScript so that it can be run by Node.js).
 
 * server
 
@@ -114,7 +130,7 @@ Open a web browser and navigate to "[http://localhost:8080/](http://localhost:80
 
   * components
 
-     Each page is defined here (they are written in React). The "routes.js" file contains the routing information of the pages (the structure of the website).
+     Each page is defined here (they are written in React). The "routes.jsx" file contains the routing information of the pages (the structure of the website).
 
   * styles
 
@@ -128,13 +144,25 @@ Open a web browser and navigate to "[http://localhost:8080/](http://localhost:80
 
      Renders the React document starting with the entry "Router" object (which handles the navigation between pages).
 
+* test
+
+  Database test data and generation scripts.
+
+  * boxes.json, users.json
+
+     Test data for the boxes and users collections, generated online and by generate.js.
+
+  * generate.js
+
+     Generates some parts of the data to complete a basic json generated online. Uncomment appropriate parts of the script to use it.
+
+  * init_db(_online).bat
+
+     Initialises a local or online database. **Before running this script the last section of generate.js must be uncommented.**
+
 * www
 
    Files that will be sent to the client the first time it visits the webapp. They are generated from the source files in the "src" folder by the build_client.js script.
-
-  * external
-
-    Contains libraries used by the application at runtime (e.g. React, MobX, etc.).
 
   * bundle.js
 
@@ -151,14 +179,6 @@ Open a web browser and navigate to "[http://localhost:8080/](http://localhost:80
 * .eslintrc
 
   Configuration file for the linter. It specifies the coding standard and the rules of it.
-
-* build_client.js
-
-   Code that generates "www/bundle.js" - by translating and packing the react elements together - and "www/styles.css". If "yarn run edit" command is used it runs every time the code changes updating the bundle.js file.
-
-* build_server.js
-
-  Code that generates server.bundle.js from server.js (to convert ES6 and JSX code in server.js to plain JavaScript so that it can be run by Node.js).
 
 * jsconfig.json
 

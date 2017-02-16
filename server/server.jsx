@@ -34,8 +34,8 @@ app.get('*', (req, res) => {
 const externalDependencies = `
           <script src="https://unpkg.com/react@^15.4.2/dist/react.js"></script>
           <script src="https://unpkg.com/react-dom@^15.4.2/dist/react-dom.js"></script>
-          <script src="https://unpkg.com/react-router@3.0.2/umd/ReactRouter.js"></script>
-          <script src="https://unpkg.com/react-bootstrap@0.30.7/dist/react-bootstrap.js"></script>
+          <script src="https://unpkg.com/react-router@^3.0.2/umd/ReactRouter.js"></script>
+          <script src="https://unpkg.com/react-bootstrap@^0.30.7/dist/react-bootstrap.js"></script>
           <script src="https://unpkg.com/mobx@^3.1.0/lib/mobx.umd.js"></script>
           <script src="https://unpkg.com/mobx-react@^4.1.0/index.js"></script>
 `;
