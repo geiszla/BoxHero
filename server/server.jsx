@@ -16,6 +16,13 @@ app.use(compression());
 
 app.use(express.static(path.join(__dirname, 'www'), { index: false }));
 
+app.use('/api',
+  graphqlHTTP({
+    schema: graphQLSchema,
+    graphiql: true
+  }),
+);
+
 app.get('*', (req, res) => {
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
@@ -68,11 +75,3 @@ app.listen(PORT, () => {
 mongoose.connect('mongodb://boxhero:BoxHeroY4@ds011374.mlab.com:11374/boxhero', () => {
   console.log('Connected to MongoDB server.');
 });
-
-// GraphQL
-app.use('/api',
-  graphqlHTTP({
-    schema: graphQLSchema
-//    graphiql: true
-  }),
-);

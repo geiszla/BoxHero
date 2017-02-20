@@ -9,8 +9,8 @@ export default class Login extends React.Component {
   @observable boxesFound = [];
 
   componentDidMount () {
-    sendQuery('{getBoxesFound(firstName: "Dale") { shortId }}', (data) => {
-      this.boxesFound = data.getBoxesFound;
+    sendQuery('{getBoxesFound(firstName: "Dale") { boxesFound{ shortId } }}', (data) => {
+      this.boxesFound = data.getBoxesFound.boxesFound;
     });
   }
 

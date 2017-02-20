@@ -1,5 +1,5 @@
+import { Box, Movie, User } from './mongoose';
 import { GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
-import { Movie, User } from './mongoose';
 
 const movieType = new GraphQLObjectType({
   name: 'Movie',
@@ -12,9 +12,24 @@ const movieType = new GraphQLObjectType({
 const boxType = new GraphQLObjectType({
   name: 'Box',
   fields: {
-    shortId: {
-      type: GraphQLString,
-      resolve: root => root._id.shortId
+    shortId: { type: GraphQLString }
+  }
+});
+
+const userType = new GraphQLObjectType({
+  name: 'User',
+  fields: {
+    username: { type: GraphQLString },
+    boxesFound: {
+      type: new GraphQLList(boxType),
+      resolve: (root) => {
+        return new Promise((resolve) => {
+          Box.find().byIds(root.boxesFound, (err, boxes) => {
+            if (err) console.log('Couldn\'t populate boxes.');
+            resolve(boxes);
+          });
+        });
+      }
     }
   }
 });
@@ -23,15 +38,28 @@ const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: {
     getBoxesFound: {
-      type: new GraphQLList(boxType),
+      type: userType,
       args: {
         firstName: { type: GraphQLString }
       },
       resolve: (_, { firstName }) => {
         return new Promise((resolve) => {
-          User.find().boxesFound(firstName, (err, user) => {
-            if (err) console.log('Couldn\'t get boxes.');
-            resolve(user.boxesFound);
+          User.find().boxesFound(firstName).then((user) => {
+            resolve(user);
+          });
+        });
+      }
+    },
+    addBoxToUser: {
+      type: userType,
+      args: {
+        userId: { type: GraphQLString },
+        boxId: { type: GraphQLString }
+      },
+      resolve: (_, { userId, boxId }) => {
+        return new Promise((resolve) => {
+          User.addBox(userId, boxId).then((user) => {
+            resolve(user);
           });
         });
       }

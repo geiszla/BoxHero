@@ -1,4 +1,6 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
+
+mongoose.Promise = global.Promise;
 
 // Users
 const userSchema = new Schema({
@@ -17,13 +19,25 @@ const userSchema = new Schema({
   //   }
   // ],
   boxesFound: [{
-    _id: { type: String, ref: 'Box' },
+    _id: { type: Schema.ObjectId, ref: 'Box' },
     foundDate: { type: Date, default: Date.now }
   }]
 });
 
-userSchema.query.boxesFound = (firstName, callback) => {
-  User.findOne({ 'name.first': firstName }).populate('boxesFound._id').exec(callback);
+userSchema.statics.addBox = (userId, boxId) => {
+  const boxObject = {
+    _id: boxId
+  };
+
+  return User.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { boxesFound: boxObject } },
+      { upsert: true, new: true }
+  );
+};
+
+userSchema.query.boxesFound = (firstName) => {
+  return User.findOne({ 'name.first': firstName });
 };
 
 export const User = model('User', userSchema);
@@ -37,6 +51,10 @@ const boxSchema = new Schema({
   shortId: String,
   content: String
 });
+
+boxSchema.query.byIds = (boxArray, callback) => {
+  Box.find({ _id: { $in: boxArray } }, callback);
+};
 
 export const Box = model('Box', boxSchema);
 
