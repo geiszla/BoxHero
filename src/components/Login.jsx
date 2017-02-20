@@ -1,3 +1,4 @@
+import { Button } from 'react-bootstrap';
 import React from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -20,7 +21,7 @@ export default class Login extends React.Component {
 
     return (
       <div>
-        <button onClick={() => this.props.onClick()}>Login</button>
+        <Button onClick={() => this.props.onClick()}>Login</Button>
         <div>{boxIds}</div>
       </div>
     );

@@ -17,7 +17,7 @@ module.exports.developmentOptions = {
     babel()
   ],
   external: [
-    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router'
+    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-bootstrap'
   ]
 };
 
@@ -26,7 +26,8 @@ module.exports.globalNames = {
   'mobx-react': 'mobxReact',
   react: 'React',
   'react-dom': 'ReactDOM',
-  'react-router': 'ReactRouter'
+  'react-router': 'ReactRouter',
+  'react-bootstrap': 'ReactBootstrap'
 };
 
 module.exports.productionOptions = {

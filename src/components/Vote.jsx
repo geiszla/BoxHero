@@ -1,3 +1,5 @@
+import { Button, Col, FormControl, FormGroup } from 'react-bootstrap';
+
 import React from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -41,14 +43,20 @@ export default class Vote extends React.Component {
 
     return (
       <div>
-        <input type='text' id='searchField' onKeyUp={() => this.handleKeyUp()} />
-        <button>Add</button>
+        <FormGroup>
+          <Col sm={3}>
+            <FormControl type='text' placeholder='Add new movie' id='searchField' onKeyUp={() => this.handleKeyUp()} />
+          </Col>
+          <Button>Add</Button>
+        </FormGroup>
         <div style={{ display: isNewMovieVisible }}>
           <Movie value={newMovie.title} />
         </div>
         <div>{movieList}</div>
-        <button>Vote</button>
-        <button>See Results</button>
+        <div>
+          <Button>Vote</Button>
+          <Button>See Results</Button>
+        </div>
       </div>
     );
   }

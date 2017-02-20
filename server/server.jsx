@@ -47,6 +47,7 @@ function renderPage (appHtml) {
     <head>
         <meta charset="UTF-8">
         <title>Movie Night Vote</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
         <link rel="stylesheet" href="styles.css">
         ${isProduction ? '' : externalDependencies}
         <script src="bundle.js"></script>
