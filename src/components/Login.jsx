@@ -1,28 +1,31 @@
-import { Button } from 'react-bootstrap';
-import React from 'react';
-import { observable } from 'mobx';
-import { observer } from 'mobx-react';
-import sendQuery from '../graphql';
+import { Button, Col, FormControl, FormGroup, Row } from 'react-bootstrap';
+import React, { Component } from 'react';
 
-@observer
-export default class Login extends React.Component {
-  @observable boxesFound = [];
-
-  componentDidMount () {
-    sendQuery('{getBoxesFound(firstName: "Dale") { boxesFound{ shortId } }}', (data) => {
-      this.boxesFound = data.getBoxesFound.boxesFound;
-    });
-  }
-
+export default class Login extends Component {
   render () {
-    const boxIds = this.boxesFound.map(box => (
-      <div key={box.shortId}>{box.shortId}</div>
-      ));
-
     return (
-      <div>
-        <Button onClick={() => this.props.onClick()}>Login</Button>
-        <div>{boxIds}</div>
+      <div className='container'>
+        <Row>
+          <Col mdOffset={5} md={3}>
+            <div className='form-login'>
+              <h4>Welcome Back!</h4>
+              <FormGroup>
+                <label>
+                  <FormControl bsSize='small' type='text' id='username' placeholder='Username' />
+                  <FormControl bsSize='small' type='text' id='password' placeholder='Password' />
+                </label>
+
+                <div className='wrapper'>
+                  <span className='group-btn'>
+                    <Button type='submit' bsStyle='primary' >
+                      Login
+                    </Button>
+                  </span>
+                </div>
+              </FormGroup>
+            </div>
+          </Col>
+        </Row>
       </div>
     );
   }

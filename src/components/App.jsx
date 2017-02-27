@@ -1,33 +1,17 @@
-import Login from './Login.jsx';
-import React from 'react';
-import Vote from './Vote.jsx';
+import React, { Component } from 'react';
 
-export default class App extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+import Navigation from './Navigation.jsx';
 
-  constructor () {
-    super();
-
-    this.state = {
-      isLoggedIn: false
-    };
-  }
-
-  handleLogin () {
-    this.state.isLoggedIn = true;
-    this.context.router.push('/');
-  }
-
+export default class App extends Component {
   render () {
-    let returnText;
-    if (this.state.isLoggedIn) {
-      returnText = <Vote />;
-    } else {
-      returnText = <Login onClick={() => this.handleLogin()} />;
-    }
-
-    return (returnText);
+    return (
+      <div>
+        <video id='bgvid' playsInline autoPlay muted loop>
+          <source src='background.mp4' type='video/mp4' />
+        </video>
+        <Navigation />
+        {this.props.children}
+      </div>
+    );
   }
 }

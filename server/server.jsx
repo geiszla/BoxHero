@@ -43,6 +43,7 @@ const externalDependencies = `
           <script src="https://unpkg.com/react-dom@^15.4.2/dist/react-dom.js"></script>
           <script src="https://unpkg.com/react-router@^3.0.2/umd/ReactRouter.js"></script>
           <script src="https://unpkg.com/react-bootstrap@^0.30.7/dist/react-bootstrap.js"></script>
+          <script src="https://unpkg.com/react-router-bootstrap@^0.23.1/lib/ReactRouterBootstrap.js"></script>
           <script src="https://unpkg.com/mobx@^3.1.0/lib/mobx.umd.js"></script>
           <script src="https://unpkg.com/mobx-react@^4.1.0/index.js"></script>
 `;
@@ -53,7 +54,7 @@ function renderPage (appHtml) {
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Movie Night Vote</title>
+        <title>BoxHero</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
         <link rel="stylesheet" href="styles.css">
         ${isProduction ? '' : externalDependencies}

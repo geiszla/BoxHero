@@ -17,7 +17,7 @@ module.exports.developmentOptions = {
     babel()
   ],
   external: [
-    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-bootstrap'
+    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-router-bootstrap', 'react-bootstrap'
   ]
 };
 
@@ -27,7 +27,8 @@ module.exports.globalNames = {
   react: 'React',
   'react-dom': 'ReactDOM',
   'react-router': 'ReactRouter',
-  'react-bootstrap': 'ReactBootstrap'
+  'react-bootstrap': 'ReactBootstrap',
+  'react-router-bootstrap': 'ReactRouterBootstrap'
 };
 
 module.exports.productionOptions = {
@@ -40,14 +41,19 @@ module.exports.productionOptions = {
     babel({
       exclude: 'node_modules/**'
     }),
-    nodeResolve({ jsnext: true, main: true }),
+    nodeResolve({
+      jsnext: true,
+      main: true
+    }),
     commonjs({
       namedExports: {
         react: [
           'PropTypes',
-          'createElement'
+          'createElement',
+          'Component',
+          'cloneElement'
         ],
-        'mobx-react': [ 'observer' ]
+        'mobx-react': ['observer']
       }
     }),
     replace({
