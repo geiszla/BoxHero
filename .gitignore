@@ -92,5 +92,6 @@ typings/
 
 # Node.js
 server.bundle.js
-www/*
+www/styles.css
+www/bundle.js
 !www/external/
