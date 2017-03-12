@@ -30,6 +30,13 @@ app.use('/api',
   })),
 );
 
+app.use('/api',
+  graphqlHTTP({
+    schema: graphQLSchema,
+    graphiql: true
+  }),
+);
+
 app.get('*', (req, res) => {
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
