@@ -6,7 +6,7 @@ const stylusCssModules = require('rollup-plugin-stylus-css-modules');
 const uglify = require('rollup-plugin-uglify');
 
 // Modify this value to change between development and production build
-module.exports.isProduction = false;
+module.exports.isProduction = true;
 
 module.exports.developmentOptions = {
   entry: 'src/index.jsx',
@@ -17,7 +17,7 @@ module.exports.developmentOptions = {
     babel()
   ],
   external: [
-    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router'
+    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-router-bootstrap', 'react-bootstrap'
   ]
 };
 
@@ -26,7 +26,9 @@ module.exports.globalNames = {
   'mobx-react': 'mobxReact',
   react: 'React',
   'react-dom': 'ReactDOM',
-  'react-router': 'ReactRouter'
+  'react-router': 'ReactRouter',
+  'react-bootstrap': 'ReactBootstrap',
+  'react-router-bootstrap': 'ReactRouterBootstrap'
 };
 
 module.exports.productionOptions = {
@@ -39,14 +41,19 @@ module.exports.productionOptions = {
     babel({
       exclude: 'node_modules/**'
     }),
-    nodeResolve({ jsnext: true, main: true }),
+    nodeResolve({
+      jsnext: true,
+      main: true
+    }),
     commonjs({
       namedExports: {
         react: [
           'PropTypes',
-          'createElement'
+          'createElement',
+          'Component',
+          'cloneElement'
         ],
-        'mobx-react': [ 'observer' ]
+        'mobx-react': ['observer']
       }
     }),
     replace({

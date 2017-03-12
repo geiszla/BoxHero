@@ -1,4 +1,6 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
+
+mongoose.Promise = global.Promise;
 
 // Users
 const userSchema = new Schema({
@@ -17,13 +19,41 @@ const userSchema = new Schema({
   //   }
   // ],
   boxesFound: [{
-    _id: { type: String, ref: 'Box' },
+    _id: { type: Schema.ObjectId, ref: 'Box' },
     foundDate: { type: Date, default: Date.now }
   }]
 });
 
-userSchema.query.boxesFound = (firstName, callback) => {
-  User.findOne({ 'name.first': firstName }).populate('boxesFound._id').exec(callback);
+userSchema.query.populateBoxes = (callback) => {
+  User.findOne().populate('boxesFound._id').exec((_, user) => {
+    callback(user);
+  });
+};
+
+userSchema.statics.getBoxesFound = (username, callback) => {
+  User.findOne({ 'username': username }).populate('boxesFound._id').exec((err, user) => {
+    if (err) console.log('Couldn\'t find user in database.');
+    callback(user.boxesFound);
+  });
+};
+
+userSchema.statics.updateLoginDate = (userId) => {
+  return User.findOneAndUpdate(
+    { _id: userId },
+    { loggedIn: Date.now() }
+  );
+};
+
+userSchema.statics.addBox = (userId, boxId) => {
+  const boxObject = {
+    _id: boxId
+  };
+
+  return User.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { boxesFound: boxObject } },
+      { upsert: true }
+  );
 };
 
 export const User = model('User', userSchema);
@@ -38,11 +68,8 @@ const boxSchema = new Schema({
   content: String
 });
 
+boxSchema.query.byIds = (boxArray, callback) => {
+  Box.find({ _id: { $in: boxArray } }, callback);
+};
+
 export const Box = model('Box', boxSchema);
-
-// Movies
-const movieSchema = new Schema({
-  title: String
-});
-
-export const Movie = model('Movie', movieSchema);
