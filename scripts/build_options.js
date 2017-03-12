@@ -6,7 +6,7 @@ const stylusCssModules = require('rollup-plugin-stylus-css-modules');
 const uglify = require('rollup-plugin-uglify');
 
 // Modify this value to change between development and production build
-module.exports.isProduction = true;
+module.exports.isProduction = false;
 
 module.exports.developmentOptions = {
   entry: 'src/index.jsx',

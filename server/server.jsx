@@ -3,8 +3,11 @@ import { RouterContext, match } from 'react-router';
 import React from 'react';
 import compression from 'compression';
 import express from 'express';
+import fs from 'fs';
 import graphQLSchema from './graphql';
 import graphqlHTTP from 'express-graphql';
+import http from 'http';
+import https from 'https';
 import mongoose from 'mongoose';
 import path from 'path';
 import { renderToString } from 'react-dom/server';
@@ -101,15 +104,19 @@ function renderPage (appHtml) {
    `;
 }
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Webserver running at localhost:${PORT}`);
-});
+var options = {
+  key: fs.readFileSync(path.join(__dirname, 'server/key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'server/cert.pem'))
+};
+http.createServer(app).listen(8080);
+https.createServer(options, app).listen(443);
 
-const options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
-  replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } } };
+const mongooseOptions = {
+  server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+  replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
+};
 
 // MongoDB
-mongoose.connect('mongodb://boxhero:BoxHeroY4@ds011374.mlab.com:11374/boxhero', options, () => {
+mongoose.connect('mongodb://boxhero:BoxHeroY4@ds011374.mlab.com:11374/boxhero', mongooseOptions, () => {
   console.log('Connected to MongoDB server.');
 });
