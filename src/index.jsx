@@ -2,12 +2,15 @@ import { Router, browserHistory } from 'react-router';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import routes from './components/routes.jsx';
+import { getRoutes } from './components/routes.jsx';
+import sendQuery from './graphql.js';
 import styles from './styles/styles.styl';
 
 window.addEventListener('load', () => {
   ReactDOM.render(
-    <Router routes={routes} history={browserHistory} />,
-    document.getElementById('root'),
+    <Router history={browserHistory}>
+      { getRoutes(false, false) }
+    </Router>,
+    document.getElementById('root')
   );
 });

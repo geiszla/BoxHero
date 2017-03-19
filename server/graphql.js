@@ -1,5 +1,5 @@
 import { Box, User } from './mongoose';
-import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
 
 // Viewer
 const viewerType = new GraphQLObjectType({
@@ -111,6 +111,12 @@ const queryType = new GraphQLObjectType({
         return {
           username: root.session
         };
+      }
+    },
+    isLoggedIn: {
+      type: GraphQLBoolean,
+      resolve: (root) => {
+        return root.session.isLoggedIn === true;
       }
     },
     getUserStats: {

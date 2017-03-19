@@ -1,109 +1,45 @@
 import React, { Component } from 'react';
 
-import sendQuery from '../graphql.js';
-
 export default class Home extends Component {
-  constructor () {
-    super();
-    this.state = {
-      status: ''
-    };
-    this.email = '';
-  }
-
   componentDidMount () {
-    gapi.signin2.render('g-signin2', {
-      'onsuccess': this.handleGoogleLogin
-    });
-  }
-
-  handleGoogleLogin (googleUser) {
-    const email = googleUser.getBasicProfile().getEmail();
-
-    sendQuery(`loginUser(email: "${email}", password: "")`, true, (data) => {
-      if (data.loginUser === 'not_registered') {
-        console.log('Not registered');
-        this.email = email;
-      } else {
-        console.log('Registered');
-      }
-    });
-  }
-
-  handleFacebookLogin () {
-    FB.getLoginStatus((response) => {
-      if (response.status === 'connected') {
-        this.facebookLogin();
-      } else {
-        FB.login((response) => {
-          if (response.status === 'connected') {
-            this.facebookLogin();
-          } else {
-            console.log('Couldn\'t login to Facebook. Try again!');
-          }
-        }, {scope: 'public_profile,email'});
-      }
-    });
-  }
-
-  facebookLogin () {
-    FB.api('/me?fields=email', (response) => {
-      sendQuery(`loginUser(email: "${response.email}", password: "")`, true, (data) => {
-        if (data.loginUser === 'not_registered') {
-          this.setState({ status: 'not_registered' });
-          this.email = response.email;
-        } else {
-          this.setState({ status: 'logged_in' });
-        }
-      });
-    });
-  }
-
-  handleRegister () {
-    sendQuery(`
-      addUser(
-        username: "geiszla",
-        email: "${this.email}",
-        name: {
-          first: "András",
-          last: "Geiszl"
-        }) { email }`, true, (data) => {
-          if (data.addUser !== null) {
-            this.setState({ status: 'not_registered' });
-          } else {
-            this.setState({ status: 'logged_in' });
-          }
-        });
+    initMap();
   }
 
   render () {
-    let buttonText;
-    let fbOnclick;
-    switch (this.state.status) {
-      case 'not_registered':
-        buttonText = 'Register';
-        fbOnclick = () => this.handleRegister();
-        break;
-
-      case 'logged_in':
-        buttonText = 'Logged In';
-        fbOnclick = () => { alert(`User is already logged in.`); };
-        break;
-
-      default:
-        buttonText = 'Login';
-        fbOnclick = () => this.handleFacebookLogin();
-        break;
-    }
-
     return (
-      <div className='container'>
-        {'Facebook: '}
-        <a onClick={fbOnclick}>{buttonText}</a>
-        <br />
-        <br />
-        {'Google: '}
-        <div id='g-signin2' />
+      <div>
+        <div className='container'>
+          <div id='map' />
+        </div>
+
+        <div className='modal left fade' id='myModal' tabIndex='-1' role='dialog' aria-labelledby='myModalLabel'>
+          <div className='modal-dialog' role='document'>
+            <div className='modal-content'>
+
+              <div className='modal-header'>
+                <button type='button' className='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <h4 className='modal-title' id='myModalLabel'>Left Sidebar</h4>
+              </div>
+
+              <div className='modal-body'>
+                <p>Anim pariatur cliche reprehenderit, enim eiusmod
+                  high life accusamus terry richardson ad squid. 3
+                  wolf moon officia aute, non cupidatat skateboard
+                  dolor brunch. Food truck quinoa nesciunt laborum
+                  eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
+                  a bird on it squid single-origin coffee nulla
+                  assumenda shoreditch et. Nihil anim keffiyeh
+                  helvetica, craft beer labore wes anderson cred
+                  nesciunt sapiente ea proident. Ad vegan excepteur
+                  butcher vice lomo. Leggings occaecat craft beer
+                  farm-to-table, raw denim aesthetic synth nesciunt
+                  you probably haven't heard of them accusamus labore
+                  sustainable VHS.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

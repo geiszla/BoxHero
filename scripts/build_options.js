@@ -17,11 +17,12 @@ module.exports.developmentOptions = {
     babel()
   ],
   external: [
-    'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-router-bootstrap', 'react-bootstrap'
+    'google-map-react', 'mobx', 'mobx-react', 'react', 'react-dom', 'react-router', 'react-router-bootstrap', 'react-bootstrap'
   ]
 };
 
 module.exports.globalNames = {
+  'google-map-react': 'GoogleMapReact',
   mobx: 'mobx',
   'mobx-react': 'mobxReact',
   react: 'React',

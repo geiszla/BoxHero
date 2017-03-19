@@ -1,0 +1,200 @@
+@font-face {
+   font-family: Headers;
+   src: url(fonts/Geogrotesque/Geogtq-Lg.otf);
+}
+
+@font-face {
+   font-family: SubHeaders;
+   src: url(fonts/Geogrotesque/Geogtq-Md.otf);
+}
+
+@font-face {
+   font-family: Paragraphs;
+   src: url(fonts/Geogrotesque/Geogtq-Rg.otf);
+}
+
+h1,h2,h3{
+	font-family: Headers;
+}
+
+p1{
+	font-family: Paragraphs;
+}
+
+
+body {
+  padding-top: 20px;
+}
+
+nav{
+	padding-bottom:40px;
+}
+
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 0;
+}
+
+#firstStep{
+	padding-top: 40px;
+}
+
+#secondStep{
+	padding-top:150px;
+	text-align:right;
+}
+
+#thirdStep{
+	padding-top:100px;
+}
+
+#SignUp{
+	padding-top:50px;
+	padding-bottom:50px;
+	text-align: center;
+}
+
+#exampleMap, #exampleQBox{
+	float: right;
+}
+
+#exampleBox{
+	float: left;
+	padding-left:120px;
+}
+
+
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+#login-modal .modal-dialog {
+    width: 350px;
+}
+
+#login-modal input[type=text], input[type=password] {
+	margin-top: 10px;
+	width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#signUp-modal .modal-dialog {
+    width: 350px;
+}
+
+#signUp-modal input[type=text], input[type=password], input[type=email] {
+	margin-top: 10px;
+	width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    border: 1px solid #bdc3c7;
+    border-radius: 4x;
+    outline: 0;
+}
+
+.modal-header {
+    min-height: 16.43px;
+    padding: 15px 15px 15px 15px;
+    border-bottom: 0px;
+}
+
+.modal-body {
+    position: relative;
+    padding: 5px 15px 5px 15px;
+}
+
+.modal-footer {
+    padding: 15px 15px 15px 15px;
+    text-align: left;
+    border-top: 0px;
+}
+
+.form-help{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+#forgotPass{
+	float:right;
+}
+#LogInSignUp{
+	float:right;
+	background:none;
+	border: 2px solid #0099cc;
+	color: #0099cc;
+}
+#noAccount{
+	padding-top:8px;
+}
+
+#form-terms{
+	padding-top:8px;
+}
+
+#signUpButton{
+  padding-top:12px;
+}
+
+#map{
+      height: 500px;
+      width: 100%;
+      margin: auto;
+	  
+    }
+
+.modal.left .modal-dialog{
+		position: fixed;
+		margin: auto;
+		width: 320px;
+		height: 100%;
+		-webkit-transform: translate3d(0%, 0, 0);
+		    -ms-transform: translate3d(0%, 0, 0);
+		     -o-transform: translate3d(0%, 0, 0);
+		        transform: translate3d(0%, 0, 0);
+	}
+.modal.left .modal-header{
+	border-bottom-color: #EEEEEE;
+		background-color: #FAFAFA;
+}
+	.modal.left .modal-content {
+		height: 100%;
+		overflow-y: auto;
+		border-radius: 0;
+		border: none;
+	}
+	
+	.modal.left .modal-body {
+		padding: 15px 15px 80px;
+	}
+
+/*Left*/
+	.modal.left.fade .modal-dialog{
+		left: -320px;
+		-webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+		   -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+		     -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+		        transition: opacity 0.3s linear, left 0.3s ease-out;
+	}
+	
+	.modal.left.fade.in .modal-dialog{
+		left: 0;
+	}
+        
+
+.navbar-nav>li>a.profile-image  {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+    

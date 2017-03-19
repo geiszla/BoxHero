@@ -1,48 +1,58 @@
-import { Glyphicon, Nav, NavItem, Navbar } from 'react-bootstrap';
+import { IndexLink, Link } from 'react-router';
 import React, { Component } from 'react';
 
-import { Link } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 
+@observer
 export default class Navigation extends Component {
-  render () {
-    return (
-      <Navbar inverse collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to='home'>Box Hero</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
+  @observable isLoggedIn = false;
 
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer to='home'>
-              <NavItem>Home</NavItem>
-            </LinkContainer>
-            <LinkContainer to='about'>
-              <NavItem>About</NavItem>
-            </LinkContainer>
-            <LinkContainer to='rules'>
-              <NavItem>Rules</NavItem>
-            </LinkContainer>
-          </Nav>
-          <Nav pullRight>
-            <LinkContainer to='login'>
-              <NavItem>
-                <Glyphicon glyph='log-in' />
-                {' Login'}
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to='register'>
-              <NavItem>
-                <Glyphicon glyph='new-window' />
-                {' Register'}
-              </NavItem>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+  constructor (props) {
+    super(props);
+    this.loggedIn = this.props.isLoggedIn;
+  }
+
+  render () {
+    let menuItems;
+    if (this.isLoggedIn === true) {
+      menuItems = (
+        <ul className='nav nav-pills pull-right'>
+          <li><Link to='about'>About</Link></li>
+          <li><Link to='rules'>Rules</Link></li>
+          <li><Link to='ranking'>Ranking</Link></li>
+          <li className='dropdown'>
+            <a href='#' className='dropdown-toggle' data-toggle='dropdown'>
+              <img src='https://placehold.it/20x20' className='profile-image img-circle' /> Username <b className='caret' /></a>
+            <ul className='dropdown-menu'>
+              <li><a href='#'><i className='fa fa-cog' /> Place a box</a></li>
+              <li><a href='#'><i className='fa fa-cog' /> Account</a></li>
+              <li className='divider' />
+              <li><a href='#'><i className='fa fa-sign-out' /> Sign-out</a></li>
+            </ul>
+          </li>
+        </ul>
+      );
+    } else {
+      menuItems = (
+        <ul className='nav nav-pills pull-right'>
+          <li><a href='#'
+            data-toggle='modal' data-target='#signUp-modal'>Sign up</a></li>
+          <li><a href='#'
+            data-toggle='modal' data-target='#login-modal' >Log in</a></li>
+        </ul>
+      );
+    }
+
+    return (
+      <div className='container'>
+        <div className='header clearfix'>
+          <nav>
+            { menuItems }
+            <IndexLink to='/' activeClassName='active'><img src='images/logo8.png' /></IndexLink>
+          </nav>
+        </div>
+      </div>
     );
   }
 }
