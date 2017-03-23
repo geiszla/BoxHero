@@ -1,5 +1,8 @@
 import { Box, User } from './mongoose';
-import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
+
+import FB from 'fb';
+import bcrypt from 'bcrypt';
 
 // Viewer
 const viewerType = new GraphQLObjectType({
@@ -89,10 +92,19 @@ const userType = new GraphQLObjectType({
   fields: {
     username: { type: GraphQLString },
     email: { type: GraphQLString },
-    name: { type: nameType },
+    // name: { type: nameType },
     registered: { type: GraphQLString },
     loggedIn: { type: GraphQLString },
-    boxesFound: { type: new GraphQLList(boxType) }
+    boxesFound: { type: new GraphQLList(boxType) },
+    noOfBoxesFound: {
+      type: GraphQLInt,
+      resolve: (root) => root.boxesFound.length
+    },
+    boxesAdded: { type: new GraphQLList(boxType) },
+    noOfBoxesAdded: {
+      type: GraphQLInt,
+      resolve: (root) => root.boxesAdded.length
+    }
   }
 });
 
@@ -107,7 +119,6 @@ const queryType = new GraphQLObjectType({
     viewer: {
       type: viewerType,
       resolve: (root) => {
-        console.log(root.session);
         return {
           username: root.session
         };
@@ -119,11 +130,36 @@ const queryType = new GraphQLObjectType({
         return root.session.isLoggedIn === true;
       }
     },
+    logout: {
+      type: GraphQLString,
+      resolve: (root) => {
+        root.session.isLoggedIn = false;
+        root.session._id = null;
+      }
+    },
+    getTopUsers: {
+      type: new GraphQLList(userType),
+      resolve: (root) => {
+        if (!root.session.isLoggedIn) {
+          return null;
+        }
+
+        return new Promise((resolve) => {
+          User.getTopUsers((users) => {
+            const topUsers = users.map((user) => {
+              user.document.noOfBoxesFound = user.noOfBoxesFound;
+              return user.document;
+            });
+            resolve(topUsers);
+          });
+        });
+      }
+    },
     getUserStats: {
       type: userType,
-      resolve: () => {
+      resolve: (root) => {
         return new Promise((resolve) => {
-          User.find().populateBoxes((user) => {
+          User.find().populateBoxes(root.session._id, (user) => {
             resolve(user);
           });
         });
@@ -227,54 +263,106 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    addUser: {
+    addUserAndLogIn: {
       type: userType,
       args: {
-        username: { type: GraphQLString },
-        email: { type: GraphQLString },
-        name: { type: nameInputType }
+        username: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (_, { username, email, name }) => {
+      resolve: (root, { username, email, password }) => {
         return new Promise((resolve) => {
-          const newUser = new User({
-            username: username,
-            email: email,
-            name: name
-          });
-
-          newUser.save((err) => {
-            if (err) {
-              console.log('Couldn\'t add user to database.');
+          User.findOne({ $or: [ { email: email }, { username: username } ] }, (_, user) => {
+            if (user) {
               resolve(null);
-            } else {
-              root.session._id = newUser._id;
-              resolve(newUser);
             }
+
+            bcrypt.hash(password, 10, (err, hash) => {
+              if (err) console.log('Could\'t hash password.');
+              const newUser = new User({
+                username: username,
+                email: email,
+                password: hash
+              });
+
+              newUser.save((err) => {
+                if (err) {
+                  console.log('Couldn\'t add user to database.');
+                  resolve(null);
+                } else {
+                  root.session._id = newUser._id;
+                  root.session.isLoggedIn = true;
+                  resolve(newUser);
+                }
+              });
+            });
           });
         });
       }
     },
-    loginUser: {
+    loginUserWithPassword: {
       type: GraphQLString,
       args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString }
+        username: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (root, { email, password }) => {
+      resolve: (root, { username, password }) => {
         return new Promise((resolve) => {
           User.findOneAndUpdate(
-            { email: email },
+            { $or: [ { email: username }, { username: username } ] },
             { loggedIn: Date.now() },
-            (err, obj) => {
+            (err, user) => {
               if (err) console.log('Search for user in database failed.');
 
-              if (obj !== null) {
-                root.session._id = obj._id;
-                resolve('logged_in');
+              if (user !== null) {
+                bcrypt.compare(password, user.password, (err, res) => {
+                  if (err) console.log('Couldn\'t compare password hases.');
+
+                  if (res === true) {
+                    root.session._id = user._id;
+                    root.session.isLoggedIn = true;
+                    resolve('logged_in');
+                  } else {
+                    resolve('wrong_password');
+                  }
+                });
               } else {
                 resolve('not_registered');
               }
             });
+        });
+      }
+    },
+    loginUserWithToken: {
+      type: GraphQLString,
+      args: {
+        oauthType: { type: new GraphQLNonNull(GraphQLInt) },
+        token: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (root, { oauthType, token }) => {
+        return new Promise((resolve) => {
+          if (oauthType === 0) {
+            FB.setAccessToken(token);
+            FB.api('/me?fields=email', (response) => {
+              if (!response || !response.email) resolve(null);
+
+              const email = response.email;
+              User.findOneAndUpdate(
+                { email: email },
+                { loggedIn: Date.now() },
+                (err, obj) => {
+                  if (err) console.log('Search for user in database failed.');
+
+                  if (obj !== null) {
+                    root.session._id = obj._id;
+                    root.session.isLoggedIn = true;
+                    resolve('logged_in');
+                  } else {
+                    resolve('not_registered');
+                  }
+                });
+            });
+          }
         });
       }
     },

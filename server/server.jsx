@@ -1,9 +1,11 @@
 import { RouterContext, match } from 'react-router';
 
-import { Provider } from 'mobx-react';
+import FB from 'fb';
 import React from 'react';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import express from 'express';
+import favicon from 'serve-favicon';
 import fs from 'fs';
 import { getRoutes } from '../src/components/routes.jsx';
 import graphQLSchema from './graphql';
@@ -28,7 +30,9 @@ http.createServer(unsecureApp).listen(8080);
 const app = express();
 app.use(compression());
 
+app.use(favicon(path.join(__dirname, 'www', 'images', 'icon2.png')));
 app.use(express.static(path.join(__dirname, 'www'), { index: false }));
+app.use(cookieParser());
 app.use(session({
   secret: 'boxhero-secret',
   cookie: { maxAge: 60000 },
@@ -45,18 +49,15 @@ app.use('/api',
 );
 
 app.get('*', (req, res) => {
-  const isLoggedIn = session.isLoggedIn === true;
+  const isLoggedIn = req.session.isLoggedIn === true;
 
-  match({ routes: getRoutes(true, isLoggedIn), location: req.url }, (err, redirect, props) => {
+  match({ routes: getRoutes(isLoggedIn), location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message);
     } else if (redirect) {
       res.redirect(redirect.pathname + redirect.search);
     } else if (props) {
-      const appHtml = renderToString(
-        <Provider isLoggedIn={isLoggedIn}>
-          <RouterContext {...props} />
-        </Provider>);
+      const appHtml = renderToString(<RouterContext {...props} />);
       res.send(renderPage(appHtml));
     } else {
       res.status(404).send('Not Found');
@@ -75,17 +76,25 @@ const externalDependencies = `
           <script src="https://unpkg.com/google-map-react@^0.23.0/dist/GoogleMapReact.js"></script>
 `;
 
+const fbOptions = {
+  appId: '426218011064795',
+  xfbml: true,
+  version: 'v2.8'
+};
+FB.options(fbOptions);
+
 function renderPage (appHtml) {
   return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
-    
+
       <meta charset="UTF-8">
       <meta name="google-signin-client_id" content="256326205648-jir98nj3b2uoo9o0uvfrp7m7hbrp516m.apps.googleusercontent.com">
 
-      <title>BoxHero</title>
+      <title>Box Hero</title>
 
+      <link rel="stylesheet" type="text/css" href="styles.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" type="text/css" href="custom.css">
       <link rel="stylesheet" type="text/css" href="temp.css">
@@ -93,19 +102,15 @@ function renderPage (appHtml) {
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-      <script type="text/javascript" src="map.js"></script> 
+      <script type="text/javascript" src="map.js"></script>
       <script async defer
       src="https://maps.googleapis.com/maps/api/js">
       </script>
       <script src="https://apis.google.com/js/platform.js" async defer></script>
-      
+
       <script>
           window.fbAsyncInit = function() {
-          FB.init({
-              appId      : '426218011064795',
-              xfbml      : true,
-              version    : 'v2.8'
-          });
+          FB.init(${JSON.stringify(fbOptions)});
           FB.AppEvents.logPageView();
           };
 
@@ -121,7 +126,7 @@ function renderPage (appHtml) {
        ${isProduction ? '' : externalDependencies}
 
       <script src="bundle.js"></script>
-      
+
     </head>
     <body>
 
@@ -134,7 +139,8 @@ function renderPage (appHtml) {
 
 var options = {
   key: fs.readFileSync(path.join(__dirname, 'server/key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'server/cert.pem'))
+  cert: fs.readFileSync(path.join(__dirname, 'server/cert.crt')),
+  passphrase: 'BoxHeroY4'
 };
 https.createServer(options, app).listen(443);
 

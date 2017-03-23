@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "main": "server.bundle.js",
   "scripts": {
-    "start": "nodemon -e js,jsx --watch server --watch scripts/build_client.js --watch scripts/build_options.js --exec yarn run start:server",
+    "start": "nodemon -e js,jsx --watch server --watch scripts/build_client.js --watch scripts/build_options.js --watch src --exec yarn run start:server",
     "start:server": "node scripts/build_server.js && node server.bundle.js",
     "production": "node server.bundle.js",
     "edit": "nodemon -e js,jsx,html,styl --watch src --watch scripts/build_client.js --watch scripts/build_options.js --exec node scripts/build_client.js"
   },
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.1",
     "express-graphql": "^0.6.3",
-    "express-jwt": "^5.1.0",
     "express-session": "^1.15.1",
     "fb": "^1.1.1",
-    "google-map-react": "^0.23.0",
     "graphql": "^0.9.1",
     "mobx": "^3.1.0",
     "mobx-react": "^4.1.0",
@@ -25,7 +25,8 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "react-router": "^3.0.2",
-    "react-router-bootstrap": "^0.23.1"
+    "react-router-bootstrap": "^0.23.1",
+    "serve-favicon": "^2.4.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

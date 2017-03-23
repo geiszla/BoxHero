@@ -5,10 +5,11 @@ export default function sendQuery (query, isMutation, callback) {
       Accept: 'application/json'
     },
     method: 'POST',
+    credentials: 'include',
     body: JSON.stringify({ query: `${isMutation ? 'mutation' : ''} { ${query} }` })
   }).then((response) => {
     return response.json().then((json) => {
-      callback(json.data);
+      if (callback) callback(json.data);
     });
   });
 }

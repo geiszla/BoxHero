@@ -6,27 +6,45 @@ mongoose.Promise = global.Promise;
 const userSchema = new Schema({
   username: String,
   email: String,
-  name: {
-    first: String,
-    last: String
-  },
+  password: String,
+  // name: {
+  //   first: String,
+  //   last: String
+  // },
   registered: { type: Date, default: Date.now },
   loggedIn: { type: Date, default: Date.now },
   // friends: [
   //   {
   //     id: String,
-  //     friendsSince: { type: Date, default: Date.now }
+  //     since: { type: Date, default: Date.now }
   //   }
   // ],
+  boxesAdded: [{
+    _id: { type: Schema.ObjectId, ref: 'Box' },
+    foundDate: { type: Date, default: Date.now }
+  }],
   boxesFound: [{
     _id: { type: Schema.ObjectId, ref: 'Box' },
     foundDate: { type: Date, default: Date.now }
   }]
 });
 
-userSchema.query.populateBoxes = (callback) => {
-  User.findOne().populate('boxesFound._id').exec((_, user) => {
+userSchema.query.populateBoxes = (_id, callback) => {
+  User.findOne({ _id: _id }).populate('boxesFound._id').exec((_, user) => {
     callback(user);
+  });
+};
+
+userSchema.statics.getTopUsers = (callback) => {
+  User.aggregate([
+    { $project: {
+      noOfBoxesFound: { $size: '$boxesFound' },
+      document: '$$ROOT'
+    }},
+    { $sort: { noOfBoxesFound: -1 } }
+  ]).limit(15).exec((err, users) => {
+    if (err) console.log('Couldn\'t find top users in database.');
+    callback(users);
   });
 };
 
@@ -37,12 +55,12 @@ userSchema.statics.getBoxesFound = (username, callback) => {
   });
 };
 
-userSchema.statics.updateLoginDate = (userId) => {
-  return User.findOneAndUpdate(
-    { _id: userId },
-    { loggedIn: Date.now() }
-  );
-};
+// userSchema.statics.updateLoginDate = (userId) => {
+//   return User.findOneAndUpdate(
+//     { _id: userId },
+//     { loggedIn: Date.now() }
+//   );
+// };
 
 userSchema.statics.addBox = (userId, boxId) => {
   const boxObject = {

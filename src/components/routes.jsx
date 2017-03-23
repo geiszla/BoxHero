@@ -4,22 +4,39 @@ import About from './About.jsx';
 import App from './App.jsx';
 import Core from './Core.jsx';
 import Home from './Home.jsx';
-import Login from './Login.jsx';
 import Ranking from './Ranking.jsx';
 import React from 'react';
 import Rules from './Rules.jsx';
+import Signup from './Signup.jsx';
+import sendQuery from '../graphql.js';
 
-export const getRoutes = (isLoggedIn) => {
-  const authRequired = (nextState, replaceState) => {
-    if (!isLoggedIn) {
-      replaceState({ nextPathname: nextState.location.pathname }, '/login');
+export const getRoutes = (isServerSide, isLoggedIn) => {
+  const handleEnter = (nextState, replace, callback) => {
+    if (!isServerSide) {
+      sendQuery(`isLoggedIn`, false, (data) => {
+        redirect(data.isLoggedIn, nextState, replace, callback);
+      });
+    } else {
+      redirect(isLoggedIn, nextState, replace, callback);
     }
   };
 
+  const redirect = (loggedIn, nextState, replace, callback) => {
+    const pathname = nextState.location.pathname;
+
+    if (loggedIn && pathname === '/singup') {
+      replace('/signup');
+    } else if (!loggedIn && pathname !== '/signup') {
+      replace('/');
+    }
+
+    callback();
+  };
+
   return (
-    <Route component={App}>
-      <Route path='login' component={Login} />
-      <Route path='/' component={Core} onEnter={authRequired}>
+    <Route component={App} onEnter={handleEnter}>
+      <Route path='/signup' component={Signup} />
+      <Route path='/' component={Core} >
         <IndexRoute component={Home} />
         <Route path='home' component={Home} />
         <Route path='about' component={About} />

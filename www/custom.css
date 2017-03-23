@@ -127,7 +127,9 @@ nav{
 	padding-bottom: 20px;
 }
 #forgotPass{
-	float:right;
+	display: inline-block;
+	text-align: right;
+	width: 62%
 }
 #LogInSignUp{
 	float:right;
