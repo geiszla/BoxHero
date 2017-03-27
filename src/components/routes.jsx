@@ -23,8 +23,8 @@ export const getRoutes = (isLoggedIn) => {
   };
 
   return (
-    <Route path='/' component={App} onEnter={handleEnter}>
-      <Route component={Core} >
+    <Route component={App} onEnter={handleEnter}>
+      <Route path='/' component={Core} >
         <IndexRoute component={Home} />
         <Route path='home' component={Home} />
         <Route path='about' component={About} />

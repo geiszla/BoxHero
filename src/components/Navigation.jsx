@@ -9,8 +9,6 @@ import sendQuery from '../graphql.js';
 
 @observer
 export default class Navigation extends Component {
-  @observable username;
-
   componentDidMount () {
     this.props.updateUser();
   }
@@ -39,7 +37,7 @@ export default class Navigation extends Component {
                 <a href='#' className='dropdown-toggle' data-toggle='dropdown'>
                   <img src='https://placehold.it/20x20' className='profile-image img-circle' />{ ` ${this.props.user.username ? this.props.user.username : 'Loading...'}` } <b className='caret' /></a>
                 <ul className='dropdown-menu'>
-                  <li><a href='#'><id className='fa fa-cog' /> Place a box</a></li>
+                  <li><a onClick={() => this.props.showAddBoxModal()} style={{ cursor: 'pointer' }}><id className='fa fa-cog' /> Place a box</a></li>
                   <li ><a onClick={() => this.handleLogout()} style={{ cursor: 'pointer' }}><i className='fa fa-sign-out' /> Sign-out</a></li>
                 </ul>
               </li>

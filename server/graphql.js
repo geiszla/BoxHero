@@ -59,7 +59,7 @@ function generateShortId () {
 
   return new Promise((resolve) => {
     Box.findOne({ _id: currId }, (_, obj) => {
-      if (obj === null) {
+      if (!obj) {
         resolve(currId);
       } else {
         generateShortId().then((id) => {
@@ -208,12 +208,13 @@ const queryType = new GraphQLObjectType({
       type: new GraphQLList(boxType),
       args: {
         lattitude: { type: GraphQLFloat },
-        longitude: { type: GraphQLFloat }
+        longitude: { type: GraphQLFloat },
+        limit: { type: GraphQLInt }
       },
-      resolve: (_, { lattitude, longitude }) => {
+      resolve: (_, { lattitude, longitude, limit }) => {
         return new Promise((resolve) => {
           if (lattitude === null || longitude === null) {
-            Box.find({}, {}, { limit: 3 }, (_, boxes) => {
+            Box.find({}, {}, { limit: limit }, (_, boxes) => {
               resolve(boxes);
             });
           } else {
@@ -246,7 +247,7 @@ const queryType = new GraphQLObjectType({
               });
 
               let closestBoxes = [];
-              for (let i = 0; i < 3; i++) {
+              for (let i = 0; i < limit; i++) {
                 closestBoxes.push(boxes[boxDistances[i].index]);
               }
 
@@ -369,25 +370,32 @@ const mutationType = new GraphQLObjectType({
     addBox: {
       type: boxType,
       args: {
-        location: { type: locationInputType },
-        foundDate: { type: GraphQLString }
+        location: { type: new GraphQLNonNull(locationInputType) },
+        content: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (_, { location, foundDate }) => {
+      resolve: (root, { location, content }) => {
         return new Promise((resolve) => {
           generateShortId().then((shortId) => {
             const newBox = new Box({
               location: location,
-              shortId: shortId,
-              content: ''
+              shortId: 'BOX' + shortId,
+              content: content
             });
 
             newBox.save((err) => {
-              if (err) {
-                console.log('Couldn\'t add user to database.');
-                resolve(null);
-              } else {
-                resolve(newBox);
-              }
+              User.findOneAndUpdate(
+                { _id: root.session._id },
+                { $addToSet: { boxesAdded: { _id: newBox._id } } },
+                { new: true },
+                (err2) => {
+                  if (err || err2) {
+                    console.log('Couldn\'t add box to database.');
+                    resolve(null);
+                  } else {
+                    resolve(newBox);
+                  }
+                }
+              );
             });
           });
         });
@@ -396,12 +404,12 @@ const mutationType = new GraphQLObjectType({
     assignBox: {
       type: userType,
       args: {
-        userId: { type: GraphQLString },
-        boxId: { type: GraphQLString }
+        shortId: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (_, { userId, boxId }) => {
+      resolve: (root, { shortId }) => {
         return new Promise((resolve) => {
-          User.addBox(userId, boxId).then((user) => {
+          User.addBox(root.session._id, shortId, (err, user) => {
+            if (err) console.log('Couldn\'t add box to user.');
             resolve(user);
           });
         });

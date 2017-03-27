@@ -1,45 +1,62 @@
+import { Button, ControlLabel, Form, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 import React, { Component } from 'react';
 
+import Map from './Map.jsx';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import sendQuery from '../graphql.js';
+
+@observer
 export default class Home extends Component {
-  componentDidMount () {
-    initMap();
+  @observable boxModalShown = false;
+
+  workingBox;
+
+  showBoxModal (box) {
+    this.workingBox = box;
+    this.boxModalShown = true;
+  }
+
+  handleBoxFound (event) {
+    event.preventDefault();
+    sendQuery(`
+      assignBox (shortId: "${this.workingBox.shortId}") {
+        username,
+        noOfBoxesFound,
+        noOfBoxesAdded
+      }
+      `, true, (data) => {
+        if (data.assignBox) this.props.updateUser(data.assignBox);
+        this.boxModalShown = false;
+      });
   }
 
   render () {
     return (
       <div>
-        <div className='container'>
-          <div id='map' />
-        </div>
+        <Map showBoxModal={(box) => this.showBoxModal(box)} boxCache={this.props.boxCache} updateBoxCache={() => this.props.updateBoxCache()} />
 
-        <div className='modal left fade' id='myModal' tabIndex='-1' role='dialog' aria-labelledby='myModalLabel'>
-          <div className='modal-dialog' role='document'>
-            <div className='modal-content'>
-
-              <div className='modal-header'>
-                <button type='button' className='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                <h4 className='modal-title' id='myModalLabel'>Left Sidebar</h4>
-              </div>
-
-              <div className='modal-body'>
-                <p>Anim pariatur cliche reprehenderit, enim eiusmod
-                  high life accusamus terry richardson ad squid. 3
-                  wolf moon officia aute, non cupidatat skateboard
-                  dolor brunch. Food truck quinoa nesciunt laborum
-                  eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
-                  a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh
-                  helvetica, craft beer labore wes anderson cred
-                  nesciunt sapiente ea proident. Ad vegan excepteur
-                  butcher vice lomo. Leggings occaecat craft beer
-                  farm-to-table, raw denim aesthetic synth nesciunt
-                  you probably haven't heard of them accusamus labore
-                  sustainable VHS.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal className='left' show={this.boxModalShown} onHide={() => { this.boxModalShown = false; }}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.workingBox ? `Box description (${this.workingBox.shortId})` : 'Box description'}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>You think you have found the secret box placed by explorers,
+              meant to be found by explorers. Now is your time to prove us that
+              you have found the hiden tresure. Please enter the content of the box to the fiel below.
+              Then you can receive your reward. Keep hunting other boxes to
+              become the next Box Hero.
+            </p>
+            <br />
+            <Form action='' onSubmit={(event) => { this.handleBoxFound(event); }}>
+              <FormGroup>
+                <ControlLabel>Did you find it?</ControlLabel>
+                <input type='text' ref='boxContent' placeholder='Content' name='content' required />
+              </FormGroup>
+              <Button type='submit' bsStyle='success'>Found This Box!</Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }

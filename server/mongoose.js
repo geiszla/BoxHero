@@ -21,7 +21,7 @@ const userSchema = new Schema({
   // ],
   boxesAdded: [{
     _id: { type: Schema.ObjectId, ref: 'Box' },
-    foundDate: { type: Date, default: Date.now }
+    addedDate: { type: Date, default: Date.now }
   }],
   boxesFound: [{
     _id: { type: Schema.ObjectId, ref: 'Box' },
@@ -42,7 +42,7 @@ userSchema.statics.getTopUsers = (callback) => {
       document: '$$ROOT'
     }},
     { $sort: { noOfBoxesFound: -1 } }
-  ]).limit(15).exec((err, users) => {
+  ]).limit(12).exec((err, users) => {
     if (err) console.log('Couldn\'t find top users in database.');
     callback(users);
   });
@@ -55,23 +55,19 @@ userSchema.statics.getBoxesFound = (username, callback) => {
   });
 };
 
-// userSchema.statics.updateLoginDate = (userId) => {
-//   return User.findOneAndUpdate(
-//     { _id: userId },
-//     { loggedIn: Date.now() }
-//   );
-// };
+userSchema.statics.addBox = (userId, shortId, callback) => {
+  Box.findOne({ shortId: shortId }, (err, box) => {
+    if (err) console.log('Couldn\'t find box in database.');
 
-userSchema.statics.addBox = (userId, boxId) => {
-  const boxObject = {
-    _id: boxId
-  };
-
-  return User.findOneAndUpdate(
-      { _id: userId },
-      { $addToSet: { boxesFound: boxObject } },
-      { upsert: true }
-  );
+    User.findOneAndUpdate(
+      { _id: userId,
+        'boxesFound._id': { $ne: box._id }
+      },
+      { $addToSet: { boxesFound: { _id: box._id } } },
+      { new: true },
+      callback
+    );
+  });
 };
 
 export const User = model('User', userSchema);

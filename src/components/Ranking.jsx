@@ -28,6 +28,17 @@ export default class App extends Component {
       );
     });
 
+    let userTable;
+    if (this.props.user) {
+      userTable = (
+        <tr>
+          <td>{ this.props.user.username }</td>
+          <td>{ this.props.user.noOfBoxesFound }</td>
+          <td>{ this.props.user.noOfBoxesAdded }</td>
+        </tr>
+      );
+    }
+
     return (
       <div>
         <div className='container'>
@@ -43,13 +54,10 @@ export default class App extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{ this.props.user.username }</td>
-                <td>{ this.props.user.noOfBoxesFound }</td>
-                <td>{ this.props.user.noOfBoxesAdded }</td>
-              </tr>
+              { userTable }
             </tbody>
           </table>
+          { !this.props.user ? 'Loading...' : '' }
         </div>
 
         <div className='container'>

@@ -35,7 +35,6 @@ app.use(express.static(path.join(__dirname, 'www'), { index: false }));
 app.use(cookieParser());
 app.use(session({
   secret: 'boxhero-secret',
-  cookie: { maxAge: 60000 },
   resave: true,
   saveUninitialized: true
 }));
@@ -102,7 +101,6 @@ function renderPage (appHtml) {
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-      <script type="text/javascript" src="map.js"></script>
       <script async defer
       src="https://maps.googleapis.com/maps/api/js">
       </script>
